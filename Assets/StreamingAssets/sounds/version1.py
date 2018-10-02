@@ -133,7 +133,8 @@ while True:
         print(sampleNames)
     else:
         sampleNames.append(new_name)
-        print(recommend(sampleNames))
+        choice = recommend(sampleNames)
+        print(choice)
         with open('recommendedSamples.json', 'w') as outfile:
-            json.dump(sampleNames, outfile)
+            json.dump(choice, outfile)
 
