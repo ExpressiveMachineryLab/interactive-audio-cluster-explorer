@@ -10,7 +10,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>
     </RootNamespace>
-    <ProjectGuid>{5AB7D354-41B6-89B9-3561-11432D7EB2E2}</ProjectGuid>
+    <ProjectGuid>{3382EFE2-6FD9-B415-00A6-415C74EA2F66}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -59,16 +59,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\FileIO.cs" />
     <Compile Include="Assets\Scripts\InstantiatePoints.cs" />
     <Compile Include="Assets\Scripts\MouseInteraction.cs" />
     <Compile Include="Assets\Scripts\MoveCamera.cs" />
+    <Compile Include="Assets\Scripts\Point.cs" />
+    <Compile Include="Assets\Scripts\VisualizeRecommendations.cs" />
+    <None Include="Assets\StreamingAssets\sounds\user_sounds.txt" />
     <None Include="Assets\StreamingAssets\sounds\filenames.txt" />
+    <None Include="Assets\StreamingAssets\sounds\audiokeys_sounds.txt" />
     <None Include="Assets\StreamingAssets\sounds\durations.txt" />
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>/Users/mikhailjacob/projects/interactiveaudioclusterexplorer/InteractiveAudioClusterExplorer/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>/Users/mikhailjacob/projects/interactive-audio-cluster-explorer/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>/Users/mikhailjacob/projects/interactiveaudioclusterexplorer/InteractiveAudioClusterExplorer/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>/Users/mikhailjacob/projects/interactive-audio-cluster-explorer/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>/Applications/Unity2018.1.0f2/Unity.app/Contents/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

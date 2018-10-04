@@ -45,13 +45,13 @@ with open(pathToFileNames, 'r') as f:
     place = 0
     for line in f:
         name = line.replace('\n', '')
-        print('1:', name)
+        # print('1:', name)
         name = file_naming(name)
-        print('2:', name)
+        # print('2:', name)
         name = name.split("/")
         name = name[len(name) - 1]
         name = name[0:-4]
-        print('3:', name)
+        # print('3:', name)
         fingerprints.update({name: list(a_fingerprints[place])})
         place += 1
 
