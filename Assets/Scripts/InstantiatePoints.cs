@@ -109,7 +109,6 @@ public class InstantiatePoints : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
         if(Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("Clicked left mouse button");
@@ -122,7 +121,7 @@ public class InstantiatePoints : MonoBehaviour
                 }
                 playingSource.clip = bufferSource.clip;
                 playingSource.Play();
-                //Debug.Log("Played source");
+                Debug.Log("Played source");
             }
         }
 
@@ -138,7 +137,10 @@ public class InstantiatePoints : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            visualizer.SendRecommendations();
+            if(visualizer.IsVizActive())
+            {
+                visualizer.SendRecommendations();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -162,7 +164,10 @@ public class InstantiatePoints : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            visualizer.ClearRecommendations();
+            if(visualizer.IsVizActive())
+            {
+                visualizer.ClearRecommendations();
+            }
         }
     }
 

@@ -27,6 +27,18 @@ pathToFileNames = "filenames.txt"
 # a_samples = np.load('samples.npy')
 a_fingerprints = np.load('fingerprints.npy')
 
+# IP address to send data to.
+remoteIPAddress = "127.0.0.1"
+
+# port to send data to.
+remotePort = 5005
+
+# IP address of server.
+localIPAddress = "127.0.0.1"
+
+# Port of server.
+localPort = 5006
+
 scripts = []
 dictList = {}
 fingerprints = {}
@@ -137,31 +149,36 @@ def send(s_n):
     ','.join(str(i) for i in choice)
     with open('recommendedSamples.json', 'w') as outfile:
         json.dump(choice, outfile)
+
+    print('Sending: ', "/recommendations", ' : ', choice)
     client.send_message("/recommendations", choice)
+    print('Sending: ', "/selectedsamples", ' : ', sampleNames)
     client.send_message("/selectedsamples", sampleNames)
 
-
 sampleNames = []
-client = udp_client.SimpleUDPClient("127.0.0.1", 5005)
+client = udp_client.SimpleUDPClient(remoteIPAddress, remotePort)
 dispatcher = dispatcher.Dispatcher()
-server = osc_server.ForkingOSCUDPServer(("127.0.0.1", 5006), dispatcher)
-
+server = osc_server.ForkingOSCUDPServer((localIPAddress, localPort), dispatcher)
 
 def add_sample(unused_addr, args):
+    print('Received: ', unused_addr, ' : ', args)
     global sampleNames
-    names = args[0].split(",")
-    for i in names:
-        sampleNames.append(i)
+    # names = str(args).split(",")
+    # for i in names:
+    #     sampleNames.append(i)
+    sampleNames = args
     send(sampleNames)
 
 
 def clear(unused_addr, args):
+    print('Received: ', unused_addr, ' : ', args)
     global sampleNames
     sampleNames = []
-    send(sampleNames)
+    # send(sampleNames)
 
 
 def server_shutdown(unused_addr, args):
+    print('Received: ', unused_addr, ' : ', args)
     server.shutdown()
 
 

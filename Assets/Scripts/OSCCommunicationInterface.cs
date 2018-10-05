@@ -50,14 +50,21 @@ public class OSCCommunicationInterface : MonoBehaviour
 
     public void SendSamples(List<Point> samplePoints, string separatorString)
     {
-        string messageString = "";
-        foreach(Point point in samplePoints)
+        //string messageString = "";
+        OSCValue[] messageStrings = new OSCValue[samplePoints.Count];
+        for (int index = 0; index < samplePoints.Count; index++)
         {
-            messageString += point.name + separatorString;
+            //messageString += point.name + separatorString;
+            messageStrings[index] = OSCValue.String(samplePoints[index].name);
         }
-        messageString = messageString.Substring(0, messageString.Length - separatorString.Length);
+        //messageString = messageString.Substring(0, messageString.Length - separatorString.Length);
+
         OSCMessage message = new OSCMessage(samplesFilter);
-        message.AddValue(OSCValue.String(messageString));
+        //message.AddValue(OSCValue.String(messageString));
+
+        message.AddValue(OSCValue.Array(messageStrings));
+
+        Debug.Log("Sent: " + message.ToString());
 
         transmitter.Send(message);
     }
@@ -67,6 +74,8 @@ public class OSCCommunicationInterface : MonoBehaviour
         OSCMessage message = new OSCMessage(clearFilter);
         message.AddValue(OSCValue.String("clear"));
 
+        Debug.Log("Sent: " + message.ToString());
+
         transmitter.Send(message);
     }
 
@@ -74,6 +83,8 @@ public class OSCCommunicationInterface : MonoBehaviour
     {
         OSCMessage message = new OSCMessage(exitFilter);
         message.AddValue(OSCValue.String("exit"));
+
+        Debug.Log("Sent: " + message.ToString());
 
         transmitter.Send(message);
     }

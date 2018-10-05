@@ -14,7 +14,7 @@ public class MouseInteraction : EventTrigger
     {
         instantiatePointsComponent.SetCurrentPoint(point);
         StartCoroutine(LoadClipWWW());
-        //Debug.Log("Loaded clip and source for " + gameObject.name);
+        Debug.Log("Loaded clip and source for " + gameObject.name);
     }
 
     public IEnumerator LoadClip()
@@ -27,7 +27,7 @@ public class MouseInteraction : EventTrigger
 
         sourceObject.GetComponents<AudioSource>()[0].clip = clip;
 
-        //Debug.Log("Loaded clip for " + gameObject.name + " with " + point.filename);
+        Debug.Log("Loaded clip for " + gameObject.name + " with " + point.filename);
     }
 
     public IEnumerator LoadClipWWW()
@@ -46,6 +46,6 @@ public class MouseInteraction : EventTrigger
         yield return clip;
 
         sourceObject.GetComponents<AudioSource>()[0].clip = clip;
-        //Debug.Log("Loaded clip for " + gameObject.name + " with " + filename);
+        Debug.Log("Loaded clip for " + gameObject.name + " with " + point.filename);
     }
 }

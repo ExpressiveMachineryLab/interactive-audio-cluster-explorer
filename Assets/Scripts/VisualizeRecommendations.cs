@@ -217,10 +217,13 @@ public class VisualizeRecommendations : MonoBehaviour
 
     public void AddCuedRecommenderPoint(Point point)
     {
-        cuedRecommendationPoints.Add(point);
-        Debug.Log("Added " + point.name + " to cued recommendation points.");
-        
-        SelectPointsFromList(cuedRecommendationPoints);
+        if(!cuedRecommendationPoints.Contains(point))
+        {
+            cuedRecommendationPoints.Add(point);
+            Debug.Log("Added " + point.name + " to cued recommendation points.");
+
+            SelectPointsFromList(cuedRecommendationPoints);
+        }
     }
 
     public void SendRecommendations()
