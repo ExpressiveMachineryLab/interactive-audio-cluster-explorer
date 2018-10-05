@@ -20,11 +20,11 @@ public class InstantiatePoints : MonoBehaviour
     private GameObject refSpriteObject;
     private Sprite referenceSprite;
     private GameObject audioSourceObject;
-    //private AudioClip sound;
     private AudioSource bufferSource;
     private AudioSource playingSource;
     private List<Point> points;
     private int coordinatesPathIndex;
+    private Point currentPoint;
 
     public string filenamesPath = "/sounds/filenames.txt";
     public string namesPath = "/sounds/name.tsv";
@@ -109,32 +109,36 @@ public class InstantiatePoints : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+
         if(Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Clicked mouse");
-            //source = MouseInteraction.source;
-            if(bufferSource.clip != null)
+            Debug.Log("Clicked left mouse button");
+
+            if (bufferSource.clip != null)
             {
-                if(playingSource.isPlaying)
+                if (playingSource.isPlaying)
                 {
                     playingSource.Stop();
                 }
                 playingSource.clip = bufferSource.clip;
                 playingSource.Play();
-                //bufferSource.PlayOneShot(bufferSource.clip, 1);
-                Debug.Log("Played source");
+                //Debug.Log("Played source");
             }
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log("Clicked mouse");
-            //source = MouseInteraction.source;
-            if (bufferSource.clip != null)
+            Debug.Log("Clicked right mouse button");
+
+            if (visualizer.IsVizActive())
             {
-                playingSource.PlayOneShot(bufferSource.clip, 1);
-                Debug.Log("Played source");
+                visualizer.AddCuedRecommenderPoint(currentPoint);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            visualizer.SendRecommendations();
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -155,27 +159,32 @@ public class InstantiatePoints : MonoBehaviour
         {
             visualizer.ToggleVisualizerActivation();
         }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            visualizer.ClearRecommendations();
+        }
     }
 
     private IEnumerator<List<Vector3>> InstantiateDataPoints()
     {
-        //MouseInteraction.source = source;
         MouseInteraction.sourceObject = audioSourceObject;
         for (int i = 0; i < coordinates.Count; i++)
         {
             Point point = new Point();
             point.coordinate = coordinates[i];
+            point.filename = streamingAssetsPath + "/" + filenames[i];
+            point.name = names[i];
             point.pointObject = UnityEngine.Object.Instantiate(refSpriteObject);
             point.pointObject.name = "point" + i;
             point.pointObject.transform.localScale = new Vector3(radiusScaleFactor, radiusScaleFactor, radiusScaleFactor);
             point.pointObject.transform.position = cam.ViewportToWorldPoint(new Vector3(point.coordinate.x, point.coordinate.y, 10));
             point.pointObject.GetComponent<Image>().color = Color.HSVToRGB(point.coordinate.z, 1f, 1f);
             point.pointObject.AddComponent<MouseInteraction>();
-            point.pointObject.GetComponent<MouseInteraction>().filename = streamingAssetsPath + "/" + filenames[i];
-            point.filename = streamingAssetsPath + "/" + filenames[i];
-            point.name = names[i];
-            //Debug.Log(point.name);
+            point.pointObject.GetComponent<MouseInteraction>().point = point;
+            point.pointObject.GetComponent<MouseInteraction>().instantiatePointsComponent = this;
             point.pointObject.transform.SetParent(panelObject.transform);
+            //Debug.Log(point.name);
             points.Add(point);
 
             if(i % numberOfDataPointsLoadedPerFrame == 0)
@@ -188,5 +197,10 @@ public class InstantiatePoints : MonoBehaviour
         Debug.Log("Done displaying points.");
 
         visualizer.AddPoints(points);
+    }
+
+    public void SetCurrentPoint(Point point)
+    {
+        this.currentPoint = point;
     }
 }

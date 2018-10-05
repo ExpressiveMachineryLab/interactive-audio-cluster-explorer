@@ -15,7 +15,9 @@ public class VisualizeRecommendations : MonoBehaviour
     private List<Point> pointsList;
     private Dictionary<string, Point> pointsDictionary;
     private List<Point> selectedPointsList;
+    private List<Point> cuedRecommendationPoints;
 
+    private OSCCommunicationInterface osc;
 
     private Queue<string[]> recommendationQueue;
 
@@ -31,6 +33,9 @@ public class VisualizeRecommendations : MonoBehaviour
         pointsDictionary = new Dictionary<string, Point>();
         selectedPointsList = new List<Point>();
         recommendationQueue = new Queue<string[]>();
+        cuedRecommendationPoints = new List<Point>();
+
+        osc = gameObject.GetComponent<OSCCommunicationInterface>();
 
         StartCoroutine(ReadRecommendationFile());
     }
@@ -65,6 +70,7 @@ public class VisualizeRecommendations : MonoBehaviour
         pointsDictionary.Clear();
         DeselectPoints();
         selectedPointsList.Clear();
+        cuedRecommendationPoints.Clear();
         isVizInitialized = false;
     }
 
@@ -141,15 +147,25 @@ public class VisualizeRecommendations : MonoBehaviour
 
     public void SelectPoints()
     {
-        foreach (Point point in selectedPointsList)
+        SelectPointsFromList(selectedPointsList);
+    }
+
+    public void DeselectPoints()
+    {
+        DeselectPointsFromList(selectedPointsList);
+    }
+
+    public void SelectPointsFromList(List<Point> pointsList)
+    {
+        foreach (Point point in pointsList)
         {
             point.pointObject.GetComponent<Image>().color = Color.HSVToRGB(point.coordinate.z, 1f, 1f);
         }
     }
 
-    public void DeselectPoints()
+    public void DeselectPointsFromList(List<Point> pointsList)
     {
-        foreach(Point point in selectedPointsList)
+        foreach (Point point in pointsList)
         {
             point.pointObject.GetComponent<Image>().color = Color.HSVToRGB(point.coordinate.z, 0.25f, 0.25f);
         }
@@ -157,18 +173,12 @@ public class VisualizeRecommendations : MonoBehaviour
 
     public void SelectAllPoints()
     {
-        foreach (Point point in pointsList)
-        {
-            point.pointObject.GetComponent<Image>().color = Color.HSVToRGB(point.coordinate.z, 1f, 1f);
-        }
+        SelectPointsFromList(pointsList);
     }
 
     public void DeselectAllPoints()
     {
-        foreach (Point point in pointsList)
-        {
-            point.pointObject.GetComponent<Image>().color = Color.HSVToRGB(point.coordinate.z, 0.25f, 0.25f);
-        }
+        DeselectPointsFromList(pointsList);
     }
 
     public void WriteSelectedSampleFile()
@@ -198,5 +208,43 @@ public class VisualizeRecommendations : MonoBehaviour
         {
             ActivateVisualizer();
         }
+    }
+
+    public bool IsVizActive()
+    {
+        return isRecommenderVizActive;
+    }
+
+    public void AddCuedRecommenderPoint(Point point)
+    {
+        cuedRecommendationPoints.Add(point);
+        Debug.Log("Added " + point.name + " to cued recommendation points.");
+        
+        SelectPointsFromList(cuedRecommendationPoints);
+    }
+
+    public void SendRecommendations()
+    {
+        osc.SendSamples(cuedRecommendationPoints, ",");
+
+        SelectPointsFromList(cuedRecommendationPoints);
+    }
+
+    public void ClearRecommendations()
+    {
+        osc.SendClear();
+
+        DeselectAllPoints();
+        cuedRecommendationPoints.Clear();
+    }
+
+    public void ExitRecommendations()
+    {
+        osc.SendExit();
+    }
+
+    public void OnApplicationQuit()
+    {
+        ExitRecommendations();
     }
 }

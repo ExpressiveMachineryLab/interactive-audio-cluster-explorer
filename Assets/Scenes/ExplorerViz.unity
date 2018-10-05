@@ -643,6 +643,7 @@ GameObject:
   - component: {fileID: 1505529166}
   - component: {fileID: 1505529167}
   - component: {fileID: 1505529168}
+  - component: {fileID: 1505529169}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -694,6 +695,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recommendationFilePath: /sounds/recommendedSamples.json
+--- !u!114 &1505529169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1505529165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0678a349797ce4bf495df1e803724faa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1908796527
 GameObject:
   m_ObjectHideFlags: 0
