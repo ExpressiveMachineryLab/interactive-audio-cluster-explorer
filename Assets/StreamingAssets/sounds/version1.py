@@ -5,6 +5,8 @@ import random
 import json
 from scipy.spatial import distance
 import copy
+from pythonosc import osc_message_builder
+from pythonosc import udp_client
 
 # Just sound names
 pathToSounds = "audiokeys_sounds.txt"
@@ -123,6 +125,8 @@ def recommend(ans, d_length = 10, best_length=10, chosen_length=10):
 
 
 sampleNames = []
+client = udp_client.SimpleUDPClient("127.0.0.1", 5005)
+
 while True:
     new_name = input('Sample Name (clear to start over,exit to quit): ')
     if new_name == "exit" or new_name == "quit":
@@ -137,4 +141,5 @@ while True:
         print(choice)
         with open('recommendedSamples.json', 'w') as outfile:
             json.dump(choice, outfile)
+        client.send_message("/json", choice)
 
