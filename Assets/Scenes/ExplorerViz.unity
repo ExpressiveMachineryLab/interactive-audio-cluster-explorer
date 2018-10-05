@@ -642,6 +642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1505529166}
   - component: {fileID: 1505529167}
+  - component: {fileID: 1505529168}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -673,11 +674,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5f1f3ce275b2410986ee96f1fb9928f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coordinatesPaths: []
+  filenamesPath: /sounds/filenames.txt
+  namesPath: /sounds/name.tsv
+  tsnePath: /sounds/tsne/
+  tsneFileNameFilter: '*.3d.tsv'
   coordinateScaleFactor: 1000
   radiusScaleFactor: 0.5
   centroidRadiusScaleFactor: 1
   numberOfDataPointsLoadedPerFrame: 100
+--- !u!114 &1505529168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1505529165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706006e3fa7314b978dc4bea4768fad8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recommendationFilePath: /sounds/recommendedSamples.json
 --- !u!1 &1908796527
 GameObject:
   m_ObjectHideFlags: 0
