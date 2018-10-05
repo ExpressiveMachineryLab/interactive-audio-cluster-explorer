@@ -7,6 +7,13 @@ from scipy.spatial import distance
 import copy
 from pythonosc import osc_message_builder
 from pythonosc import udp_client
+from pythonosc import dispatcher
+from pythonosc import osc_server
+from pythonosc import osc_bundle
+from pythonosc import osc_bundle_builder
+from pythonosc import osc_packet
+from pythonosc import osc_message
+import threading
 
 # Just sound names
 pathToSounds = "audiokeys_sounds.txt"
@@ -124,8 +131,46 @@ def recommend(ans, d_length = 10, best_length=10, chosen_length=10):
     return chosen
 
 
+def send(s_n):
+    choice = recommend(s_n)
+    print(choice)
+    ','.join(str(i) for i in choice)
+    with open('recommendedSamples.json', 'w') as outfile:
+        json.dump(choice, outfile)
+    client.send_message("/recommendations", choice)
+    client.send_message("/selectedsamples", sampleNames)
+
+
 sampleNames = []
 client = udp_client.SimpleUDPClient("127.0.0.1", 5005)
+dispatcher = dispatcher.Dispatcher()
+server = osc_server.ForkingOSCUDPServer(("127.0.0.1", 5006), dispatcher)
+
+
+def add_sample(unused_addr, args):
+    global sampleNames
+    names = args[0].split(",")
+    for i in names:
+        sampleNames.append(i)
+    send(sampleNames)
+
+
+def clear(unused_addr, args):
+    global sampleNames
+    sampleNames = []
+    send(sampleNames)
+
+
+def server_shutdown(unused_addr, args):
+    server.shutdown()
+
+
+dispatcher.map("/samples", add_sample)
+dispatcher.map("/clear", clear)
+dispatcher.map("/exit", server_shutdown)
+
+server_thread = threading.Thread(target=server.serve_forever)
+server_thread.start()
 
 while True:
     new_name = input('Sample Name (clear to start over,exit to quit): ')
@@ -133,13 +178,11 @@ while True:
         break
     elif new_name == "clear":
         sampleNames = []
+        send(sampleNames)
     elif new_name == "print":
         print(sampleNames)
     else:
         sampleNames.append(new_name)
-        choice = recommend(sampleNames)
-        print(choice)
-        with open('recommendedSamples.json', 'w') as outfile:
-            json.dump(choice, outfile)
-        client.send_message("/json", choice)
+        send(sampleNames)
 
+server.shutdown()
