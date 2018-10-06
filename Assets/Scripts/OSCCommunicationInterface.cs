@@ -8,6 +8,8 @@ public class OSCCommunicationInterface : MonoBehaviour
     private OSCReceiver receiver;
     private OSCTransmitter transmitter;
 
+    private VisualizeRecommendations visualizer;
+
     public int localPort = 5005;
     public int remotePort = 5006;
     public string remoteAddress = "127.0.0.1";
@@ -30,6 +32,8 @@ public class OSCCommunicationInterface : MonoBehaviour
         transmitter = gameObject.AddComponent<OSCTransmitter>();
         transmitter.RemoteHost = remoteAddress;
         transmitter.RemotePort = remotePort;
+
+        visualizer = gameObject.GetComponent<VisualizeRecommendations>();
     }
 
     // Update is called once per frame
@@ -40,28 +44,38 @@ public class OSCCommunicationInterface : MonoBehaviour
 
     public void HandleRecommendations(OSCMessage recommendationsMessage)
     {
-        Debug.Log("HandleRecommendations: " + recommendationsMessage.ToString());
+        Debug.Log("HandleRecommendations: " + recommendationsMessage);
+
+        //OSCValue[] values = recommendationsMessage.GetValues();
+        //Debug.Log("Message has " + values.Length + " values.");
+
+        //List<OSCValue> arrayValue = values[0].ArrayValue;
+        List<OSCValue> arrayValue = recommendationsMessage.Values;
+        Debug.Log("Message has " + arrayValue.Count + " values.");
+        string[] recommendations = new string[arrayValue.Count];
+        for (int index = 0; index < arrayValue.Count; index++)
+        {
+            recommendations[index] = arrayValue[index].StringValue;
+            Debug.Log("Recommendation: " + arrayValue[index].StringValue);
+        }
+
+        visualizer.VisualizeRecommendation(recommendations);
     }
 
     public void HandleSelectedSamples(OSCMessage selectedSamplesMessage)
     {
-        Debug.Log("HandleSelectedSamples: " + selectedSamplesMessage.ToString());
+        Debug.Log("HandleSelectedSamples: " + selectedSamplesMessage);
     }
 
     public void SendSamples(List<Point> samplePoints, string separatorString)
     {
-        //string messageString = "";
         OSCValue[] messageStrings = new OSCValue[samplePoints.Count];
         for (int index = 0; index < samplePoints.Count; index++)
         {
-            //messageString += point.name + separatorString;
             messageStrings[index] = OSCValue.String(samplePoints[index].name);
         }
-        //messageString = messageString.Substring(0, messageString.Length - separatorString.Length);
 
         OSCMessage message = new OSCMessage(samplesFilter);
-        //message.AddValue(OSCValue.String(messageString));
-
         message.AddValue(OSCValue.Array(messageStrings));
 
         Debug.Log("Sent: " + message.ToString());

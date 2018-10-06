@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class VisualizeRecommendations : MonoBehaviour
 {
-    public string recommendationFilePath = "/sounds/recommendedSamples.json";
-    private string streamingAssetsPath;
+    //public string recommendationFilePath = "/sounds/recommendedSamples.json";
+    //private string streamingAssetsPath;
 
     private bool isRecommenderVizActive;
     private bool isVizInitialized;
@@ -19,7 +19,7 @@ public class VisualizeRecommendations : MonoBehaviour
 
     private OSCCommunicationInterface osc;
 
-    private Queue<string[]> recommendationQueue;
+    //private Queue<string[]> recommendationQueue;
 
     /// <summary>
     /// Start this instance.
@@ -28,16 +28,16 @@ public class VisualizeRecommendations : MonoBehaviour
     {
         isRecommenderVizActive = false;
         isVizInitialized = false;
-        streamingAssetsPath = Application.streamingAssetsPath;
+        //streamingAssetsPath = Application.streamingAssetsPath;
         pointsList = new List<Point>();
         pointsDictionary = new Dictionary<string, Point>();
         selectedPointsList = new List<Point>();
-        recommendationQueue = new Queue<string[]>();
+        //recommendationQueue = new Queue<string[]>();
         cuedRecommendationPoints = new List<Point>();
 
         osc = gameObject.GetComponent<OSCCommunicationInterface>();
 
-        StartCoroutine(ReadRecommendationFile());
+        //StartCoroutine(ReadRecommendationFile());
     }
 
     /// <summary>
@@ -45,10 +45,10 @@ public class VisualizeRecommendations : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        if (isRecommenderVizActive && isVizInitialized)
-        {
-            ProcessQueue();
-        }
+        //if (isRecommenderVizActive && isVizInitialized)
+        //{
+        //    ProcessQueue();
+        //}
     }
 
     public void AddPoints(List<Point> points)
@@ -72,77 +72,84 @@ public class VisualizeRecommendations : MonoBehaviour
         selectedPointsList.Clear();
         cuedRecommendationPoints.Clear();
         isVizInitialized = false;
+        if(isRecommenderVizActive)
+        {
+            DeselectAllPoints();
+        }
     }
 
-    private IEnumerator<UnityEngine.WaitForSeconds> ReadRecommendationFile()
-    {
-        List<string> lines;
-        string[] recommendations;
-        string line;
-        while (true)
-        {
-            if(isRecommenderVizActive && isVizInitialized)
-            {
-                try
-                {
-                    //Read something.
-                    lines = FileIO.LoadStringList(streamingAssetsPath + recommendationFilePath);
-                    if (lines != null && lines.Count > 0)
-                    {
-                        line = lines[0];
-                        Debug.Log("Read: " + line);
-                        //recommendations = JsonUtility.FromJson<string[]>(line);
-                        recommendations = line.Substring(1, line.Length - 2).Replace("\"", "").Split(new string[] {", "}, StringSplitOptions.RemoveEmptyEntries);
-                        Debug.Log("String Array Length: " + recommendations.Length);
-                        foreach(string recommendation in recommendations)
-                        {
+    //private IEnumerator<UnityEngine.WaitForSeconds> ReadRecommendationFile()
+    //{
+    //    List<string> lines;
+    //    string[] recommendations;
+    //    string line;
+    //    while (true)
+    //    {
+    //        if(isRecommenderVizActive && isVizInitialized)
+    //        {
+    //            try
+    //            {
+    //                //Read something.
+    //                lines = FileIO.LoadStringList(streamingAssetsPath + recommendationFilePath);
+    //                if (lines != null && lines.Count > 0)
+    //                {
+    //                    line = lines[0];
+    //                    Debug.Log("Read: " + line);
+    //                    //recommendations = JsonUtility.FromJson<string[]>(line);
+    //                    recommendations = line.Substring(1, line.Length - 2).Replace("\"", "").Split(new string[] {", "}, StringSplitOptions.RemoveEmptyEntries);
+    //                    Debug.Log("String Array Length: " + recommendations.Length);
+    //                    foreach(string recommendation in recommendations)
+    //                    {
                             
-                            Debug.Log("Recommended: " + recommendation);
-                        }
-                        recommendationQueue.Enqueue(recommendations);
-                        File.Create(streamingAssetsPath + recommendationFilePath).Dispose();
-                    }
-                    else
-                    {
-                        //Nothing is available to read.
-                    }
-                }
-                catch(Exception e)
-                {
-                    Debug.Log("Exception during File read or write: " + e.Message);
-                }
-            }
+    //                        Debug.Log("Recommended: " + recommendation);
+    //                    }
+    //                    recommendationQueue.Enqueue(recommendations);
+    //                    File.Create(streamingAssetsPath + recommendationFilePath).Dispose();
+    //                }
+    //                else
+    //                {
+    //                    //Nothing is available to read.
+    //                }
+    //            }
+    //            catch(Exception e)
+    //            {
+    //                Debug.Log("Exception during File read or write: " + e.Message);
+    //            }
+    //        }
 
-            yield return new WaitForSeconds(.1f);
-        }
-    }
+    //        yield return new WaitForSeconds(.1f);
+    //    }
+    //}
 
-    public void ProcessQueue()
-    {
-        if(recommendationQueue.Count > 0)
-        {
-            VisualizeRecommendation(recommendationQueue.Dequeue());
-        }
-    }
+    //public void ProcessQueue()
+    //{
+    //    if(recommendationQueue.Count > 0)
+    //    {
+    //        VisualizeRecommendation(recommendationQueue.Dequeue());
+    //    }
+    //}
 
     public void VisualizeRecommendation(string[] sampleNames)
     {
-        Debug.Log("String Count: " + sampleNames.Length);
-        DeselectPoints();
-        selectedPointsList.Clear();
-        int count = 0;
-        foreach (string sample in sampleNames)
+        if (isRecommenderVizActive && isVizInitialized)
         {
-            Debug.Log("Sample: " + sample);
-            if(pointsDictionary.ContainsKey(sample))
+            Debug.Log("String Count: " + sampleNames.Length);
+            DeselectPoints();
+            selectedPointsList.Clear();
+            int count = 0;
+            foreach (string sample in sampleNames)
             {
-                Point point = pointsDictionary[sample];
-                selectedPointsList.Add(point);
-                count++;
+                Debug.Log("Sample: " + sample);
+                if (pointsDictionary.ContainsKey(sample))
+                {
+                    Point point = pointsDictionary[sample];
+                    selectedPointsList.Add(point);
+                    count++;
+                }
             }
+            Debug.Log("Loaded Count: " + count);
+            SelectPoints();
         }
-        Debug.Log("Loaded Count: " + count);
-        SelectPoints();
     }
 
     public void SelectPoints()
@@ -181,10 +188,10 @@ public class VisualizeRecommendations : MonoBehaviour
         DeselectPointsFromList(pointsList);
     }
 
-    public void WriteSelectedSampleFile()
-    {
-        //TODO: Write Selected Samples to File.
-    }
+    //public void WriteSelectedSampleFile()
+    //{
+    //    //TODO: Write Selected Samples to File.
+    //}
 
     public void ActivateVisualizer()
     {
@@ -212,7 +219,7 @@ public class VisualizeRecommendations : MonoBehaviour
 
     public bool IsVizActive()
     {
-        return isRecommenderVizActive;
+        return isRecommenderVizActive && isVizInitialized;
     }
 
     public void AddCuedRecommenderPoint(Point point)
@@ -239,6 +246,7 @@ public class VisualizeRecommendations : MonoBehaviour
 
         DeselectAllPoints();
         cuedRecommendationPoints.Clear();
+        selectedPointsList.Clear();
     }
 
     public void ExitRecommendations()
