@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\VisualizeRecommendations.cs" />
     <None Include="Assets\StreamingAssets\sounds\user_sounds.txt" />
     <None Include="Assets\StreamingAssets\sounds\filenames.txt" />
+    <None Include="Assets\StreamingAssets\sounds\audiokeys_filenames.txt" />
     <None Include="Assets\StreamingAssets\sounds\audiokeys_sounds.txt" />
     <None Include="Assets\StreamingAssets\sounds\durations.txt" />
     <Reference Include="UnityEditor.StandardEvents">

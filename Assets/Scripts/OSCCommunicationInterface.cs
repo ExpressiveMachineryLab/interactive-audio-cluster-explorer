@@ -72,7 +72,7 @@ public class OSCCommunicationInterface : MonoBehaviour
         OSCValue[] messageStrings = new OSCValue[samplePoints.Count];
         for (int index = 0; index < samplePoints.Count; index++)
         {
-            messageStrings[index] = OSCValue.String(samplePoints[index].name);
+            messageStrings[index] = OSCValue.String(samplePoints[index].audiokey);
         }
 
         OSCMessage message = new OSCMessage(samplesFilter);

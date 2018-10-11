@@ -86,4 +86,40 @@ public class FileIO
             return null;
         }
     }
+
+    /// <summary>
+    /// Loads the string dictionary. Strings are stored on file as value,key not key,value.
+    /// </summary>
+    /// <returns>The string dictionary.</returns>
+    /// <param name="fileName">File name. Strings in filename are stored on file as value,key not key,value.</param>
+    public static Dictionary<string, string> LoadStringDictionary(string fileName)
+    {
+        string line = "";
+        try
+        {
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            StreamReader reader = new StreamReader(fileName, Encoding.Default);
+            using (reader)
+            {
+                do
+                {
+                    line = reader.ReadLine();
+                    string[] kvp;//NOTE! STRING IS STORED AS VALUE,KEY NOT KEY,VALUE!!!
+                    if (line != null)
+                    {
+                        kvp = line.Split(',');
+                        dictionary.Add(kvp[1], kvp[0]);
+                    }
+                }
+                while (line != null);
+                reader.Close();
+                return dictionary;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message + ", Line: " + line);
+            return null;
+        }
+    }
 }

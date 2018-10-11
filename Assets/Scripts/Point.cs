@@ -5,6 +5,6 @@ public class Point
 {
     public GameObject pointObject;
     public string filename;
-    public string name;
+    public string audiokey;
     public Vector3 coordinate;
 }

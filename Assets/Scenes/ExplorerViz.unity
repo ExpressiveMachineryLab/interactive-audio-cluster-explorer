@@ -676,7 +676,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   filenamesPath: /sounds/filenames.txt
-  namesPath: /sounds/name.tsv
+  namesPath: /sounds/audiokeys_filenames.txt
   tsnePath: /sounds/tsne/
   tsneFileNameFilter: '*.3d.tsv'
   coordinateScaleFactor: 1000
@@ -694,7 +694,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 706006e3fa7314b978dc4bea4768fad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recommendationFilePath: /sounds/recommendedSamples.json
 --- !u!114 &1505529169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -706,6 +705,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0678a349797ce4bf495df1e803724faa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  localPort: 5005
+  remotePort: 5006
+  remoteAddress: 127.0.0.1
+  samplesFilter: /samples
+  clearFilter: /clear
+  exitFilter: /exit
+  recommendationsFilter: /recommendations
+  selectedSamplesFilter: /selectedsamples
 --- !u!1 &1908796527
 GameObject:
   m_ObjectHideFlags: 0

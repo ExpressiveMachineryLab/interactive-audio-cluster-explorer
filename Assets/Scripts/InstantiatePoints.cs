@@ -9,7 +9,7 @@ public class InstantiatePoints : MonoBehaviour
 {
     private VisualizeRecommendations visualizer;
     private List<string> filenames;
-    private List<string> names;
+    private Dictionary<string, string> filenamesToAudioKeys;
     private List<Vector3> coordinates;
     private System.Random random;
     private string streamingAssetsPath;
@@ -27,7 +27,7 @@ public class InstantiatePoints : MonoBehaviour
     private Point currentPoint;
 
     public string filenamesPath = "/sounds/filenames.txt";
-    public string namesPath = "/sounds/name.tsv";
+    public string keysnamesPath = "/sounds/audiokeys_filenames.txt";
     public string tsnePath = "/sounds/tsne/";
     public string tsneFileNameFilter = "*.3d.tsv";
     private string coordinatesPath;
@@ -64,9 +64,10 @@ public class InstantiatePoints : MonoBehaviour
         refSpriteObject = GameObject.Find("ReferenceSprite");
         referenceSprite = refSpriteObject.GetComponent<Sprite>();
         filenames = FileIO.LoadStringList(streamingAssetsPath + filenamesPath);
-        Debug.Log(filenames[random.Next(filenames.Count)]);
-        names = FileIO.LoadStringList(streamingAssetsPath + namesPath);
-        Debug.Log(names[random.Next(names.Count)]);
+        //Debug.Log(filenames[random.Next(filenames.Count)]);
+        //names = FileIO.LoadStringList(streamingAssetsPath + keysnamesPath);
+        filenamesToAudioKeys = FileIO.LoadStringDictionary(streamingAssetsPath + keysnamesPath);
+        //Debug.Log(names[random.Next(names.Count)]);
 
         InitPoints();
     }
@@ -76,7 +77,7 @@ public class InstantiatePoints : MonoBehaviour
         refSpriteObject.SetActive(true);
         coordinatesPath = coordinatesPaths[coordinatesPathIndex];
         coordinates = FileIO.LoadVector3List(coordinatesPath);
-        Debug.Log(coordinates[random.Next(coordinates.Count)]);
+        //Debug.Log(coordinates[random.Next(coordinates.Count)]);
         StartCoroutine(InstantiateDataPoints());
     }
 
@@ -176,10 +177,16 @@ public class InstantiatePoints : MonoBehaviour
         MouseInteraction.sourceObject = audioSourceObject;
         for (int i = 0; i < coordinates.Count; i++)
         {
+            if(!filenamesToAudioKeys.ContainsKey(filenames[i]))
+            {
+                continue;
+            }
+
             Point point = new Point();
             point.coordinate = coordinates[i];
             point.filename = streamingAssetsPath + "/" + filenames[i];
-            point.name = names[i];
+            point.audiokey = filenamesToAudioKeys[filenames[i]];
+
             point.pointObject = UnityEngine.Object.Instantiate(refSpriteObject);
             point.pointObject.name = "point" + i;
             point.pointObject.transform.localScale = new Vector3(radiusScaleFactor, radiusScaleFactor, radiusScaleFactor);
@@ -189,7 +196,7 @@ public class InstantiatePoints : MonoBehaviour
             point.pointObject.GetComponent<MouseInteraction>().point = point;
             point.pointObject.GetComponent<MouseInteraction>().instantiatePointsComponent = this;
             point.pointObject.transform.SetParent(panelObject.transform);
-            //Debug.Log(point.name);
+            Debug.Log(point.audiokey);
             points.Add(point);
 
             if(i % numberOfDataPointsLoadedPerFrame == 0)

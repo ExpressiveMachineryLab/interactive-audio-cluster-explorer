@@ -56,9 +56,9 @@ public class VisualizeRecommendations : MonoBehaviour
         pointsList = points;
         foreach(Point point in pointsList)
         {
-            if(!pointsDictionary.ContainsKey(point.name))
+            if(!pointsDictionary.ContainsKey(point.audiokey))
             {
-                pointsDictionary.Add(point.name, point);
+                pointsDictionary.Add(point.audiokey, point);
             }
         }
         isVizInitialized = true;
@@ -227,7 +227,7 @@ public class VisualizeRecommendations : MonoBehaviour
         if(!cuedRecommendationPoints.Contains(point))
         {
             cuedRecommendationPoints.Add(point);
-            Debug.Log("Added " + point.name + " to cued recommendation points.");
+            Debug.Log("Added " + point.audiokey + " to cued recommendation points.");
 
             SelectPointsFromList(cuedRecommendationPoints);
         }
