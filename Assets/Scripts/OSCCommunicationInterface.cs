@@ -16,6 +16,7 @@ public class OSCCommunicationInterface : MonoBehaviour
     public string samplesFilter = "/samples";
     public string clearFilter = "/clear";
     public string exitFilter = "/exit";
+    public string modeFilter = "/mode";
     public string recommendationsFilter = "/recommendations";
     public string selectedSamplesFilter = "/selectedsamples";
 
@@ -97,6 +98,16 @@ public class OSCCommunicationInterface : MonoBehaviour
     {
         OSCMessage message = new OSCMessage(exitFilter);
         message.AddValue(OSCValue.String("exit"));
+
+        Debug.Log("Sent: " + message.ToString());
+
+        transmitter.Send(message);
+    }
+
+    public void SendMode()
+    {
+        OSCMessage message = new OSCMessage(modeFilter);
+        message.AddValue(OSCValue.String("mode"));
 
         Debug.Log("Sent: " + message.ToString());
 

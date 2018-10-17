@@ -186,10 +186,14 @@ def server_shutdown(unused_addr, args):
     print('Received: ', unused_addr, ' : ', args)
     server.shutdown()
 
+def change_mode(unused_addr, args):
+    print('Received: ', unused_addr, ' : ', args)
+    #TODO: ADD SOME CODE FOR HANDLING MODE CHANGE.
 
 dispatcher.map("/samples", add_sample)
 dispatcher.map("/clear", clear)
 dispatcher.map("/exit", server_shutdown)
+dispatcher.map("/mode", change_mode)
 
 server_thread = threading.Thread(target=server.serve_forever)
 server_thread.start()

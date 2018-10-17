@@ -144,6 +144,14 @@ public class InstantiatePoints : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (visualizer.IsVizActive())
+            {
+                visualizer.ChangeRecommendationMode();
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             coordinatesPathIndex = (coordinatesPathIndex < coordinatesPaths.Length - 1) ? coordinatesPathIndex + 1 : 0;

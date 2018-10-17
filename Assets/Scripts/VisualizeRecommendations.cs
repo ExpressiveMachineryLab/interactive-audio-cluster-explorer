@@ -254,6 +254,11 @@ public class VisualizeRecommendations : MonoBehaviour
         osc.SendExit();
     }
 
+    public void ChangeRecommendationMode()
+    {
+        osc.SendMode();
+    }
+
     public void OnApplicationQuit()
     {
         ExitRecommendations();
