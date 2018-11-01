@@ -37,7 +37,7 @@ public class InstantiatePoints : MonoBehaviour
     public float radiusScaleFactor = 0.5f;
     public float centroidRadiusScaleFactor = 1f;
 
-    public int numberOfDataPointsLoadedPerFrame = 10;
+    public int numberOfDataPointsLoadedPerFrame = 15;
 
     private Vector3 centroid;
 

@@ -24,6 +24,9 @@ pathToUserSounds = "user_sounds.txt"
 # AudioNotebook file names
 pathToFileNames = "filenames.txt"
 
+# AudioNotebook file names
+pathToAudioKeyFileNames = "audiokeys_filenames.txt"
+
 # a_samples = np.load('samples.npy')
 a_fingerprints = np.load('fingerprints.npy')
 
@@ -42,6 +45,7 @@ localPort = 5006
 scripts = []
 dictList = {}
 fingerprints = {}
+akfdict = {}
 
 
 def file_naming(n):
@@ -63,18 +67,32 @@ def sort_dict(d):
 
 # all fingerprints
 with open(pathToFileNames, 'r') as f:
-    place = 0
-    for line in f:
-        name = line.replace('\n', '')
-        # print('1:', name)
-        name = file_naming(name)
-        # print('2:', name)
-        name = name.split("/")
-        name = name[len(name) - 1]
-        name = name[0:-4]
-        # print('3:', name)
-        fingerprints.update({name: list(a_fingerprints[place])})
-        place += 1
+	with open(pathToAudioKeyFileNames, 'r') as akf:
+	    for akfline in akf:
+	    	audiokeyentry = akfline.split(",")
+	    	akfdict.update({str(audiokeyentry[1]).replace('\n', ''): str(audiokeyentry[0])})
+	    	
+	    	# print('File name: ', audiokeyentry[1])
+	    	# print('Audiokey: ', akfdict[audiokeyentry[1].replace('\n', '')])
+
+	    place = 0
+	    for line in f:
+	        line = line.replace('\n', '')
+	        # print('File name: ', line)
+	        if(line in akfdict):
+	        # print('1:', name)
+	        # name = file_naming(name)
+	        # print('2:', name)
+	        # name = name.split("/")
+	        # name = name[len(name) - 1]
+	        # name = name[0:-4]
+	        # print('3:', name)
+		        name = akfdict[line]
+		        # print('Audiokey: ', name)
+	        	fingerprints.update({name: list(a_fingerprints[place])})
+	        # else:
+	        	# print('Filename', line, 'not found in akfdict')
+	        place += 1
 
 # list of all samples found in fingerprints
 with open(pathToSounds, 'r') as f:

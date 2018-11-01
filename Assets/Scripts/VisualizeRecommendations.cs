@@ -16,6 +16,8 @@ public class VisualizeRecommendations : MonoBehaviour
     private Dictionary<string, Point> pointsDictionary;
     private List<Point> selectedPointsList;
     private List<Point> cuedRecommendationPoints;
+    private GameObject panelObject;
+    private GameObject canvasObject;
 
     private OSCCommunicationInterface osc;
 
@@ -36,6 +38,9 @@ public class VisualizeRecommendations : MonoBehaviour
         cuedRecommendationPoints = new List<Point>();
 
         osc = gameObject.GetComponent<OSCCommunicationInterface>();
+
+        panelObject = GameObject.Find("Panel");
+        canvasObject = GameObject.Find("UICanvas");
 
         //StartCoroutine(ReadRecommendationFile());
     }
@@ -146,6 +151,10 @@ public class VisualizeRecommendations : MonoBehaviour
                     selectedPointsList.Add(point);
                     count++;
                 }
+                else
+                {
+                    Debug.Log("Did not find: " + sample);
+                }
             }
             Debug.Log("Loaded Count: " + count);
             SelectPoints();
@@ -167,6 +176,9 @@ public class VisualizeRecommendations : MonoBehaviour
         foreach (Point point in pointsList)
         {
             point.pointObject.GetComponent<Image>().color = Color.HSVToRGB(point.coordinate.z, 1f, 1f);
+            //Redrawing on top of other points
+            point.pointObject.transform.SetParent(canvasObject.transform);
+            point.pointObject.transform.SetParent(panelObject.transform);
         }
     }
 
